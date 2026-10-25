@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="library.xsl"?>
+<!DOCTYPE library SYSTEM "library.dtd">
+<!--
+  Experiment 5: Web Technologies
+  File: library.xml
+  Description: Structured XML catalog validated against library.dtd and styled via library.xsl.
+-->
+<library>
+  <book id="B101" category="ComputerScience" status="Available">
+    <title>Clean Code: A Handbook of Agile Software Craftsmanship</title>
+    <author>Robert C. Martin</author>
+    <publisher>Prentice Hall</publisher>
+    <year>2008</year>
+    <isbn>978-0132350884</isbn>
+    <price currency="USD">37.50</price>
+  </book>
+
+  <book id="B102" category="ComputerScience" status="Available">
+    <title>Introduction to Algorithms</title>
+    <author>Thomas H. Cormen</author>
+    <publisher>MIT Press</publisher>
+    <year>2022</year>
+    <isbn>978-0262046305</isbn>
+    <price currency="USD">85.00</price>
+  </book>
+
+  <book id="B103" category="AI" status="Borrowed">
+    <title>Artificial Intelligence: A Modern Approach</title>
+    <author>Stuart Russell</author>
+    <publisher>Pearson</publisher>
+    <year>2020</year>
+    <isbn>978-0134610993</isbn>
+    <price currency="USD">78.00</price>
+  </book>
+
+  <book id="B104" category="WebDev" status="Available">
+    <title>HTML and CSS: Design and Build Websites</title>
+    <author>Jon Duckett</author>
+    <publisher>Wiley</publisher>
+    <year>2021</year>
+    <isbn>978-1118008188</isbn>
+    <price currency="USD">32.00</price>
+  </book>
+
+  <book id="B105" category="CyberSecurity" status="Borrowed">
+    <title>The Web Application Hacker's Handbook</title>
+    <author>Dafydd Stuttard</author>
+    <publisher>Wiley</publisher>
+    <year>2011</year>
+    <isbn>978-1118026472</isbn>
+    <price currency="USD">46.50</price>
+  </book>
+</library>

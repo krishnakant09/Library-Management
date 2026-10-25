@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experiment 5: XML, DTD &amp; XSLT Library Catalog</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="catalog-container">
+    <!-- Top System Header & Tab Navigation -->
+    <header class="app-nav">
+      <div class="app-title">Web Tech Lab &bull; Experiment 5 (XML, DTD &amp; XSLT)</div>
+      <nav class="nav-tabs">
+        <button class="nav-tab-btn active" onclick="switchTab('tab-catalog', this)">Catalog Output</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-xml', this)">library.xml</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-dtd', this)">library.dtd</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-xsl', this)">library.xsl</button>
+        <button class="nav-tab-btn" onclick="switchTab('tab-notes', this)">Viva &amp; Notes</button>
+      </nav>
+    </header>
+
+    <!-- Tab 1: Live Transformed Catalog Output -->
+    <section id="tab-catalog" class="tab-content active">
+      <!-- Search Filter Bar -->
+      <div class="toolbar">
+        <input type="text" id="searchInput" class="search-box" placeholder="Quick search by title, author, category, or ID..." oninput="filterCatalog()" />
+        <span id="bookCountBadge" style="font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">Showing 5 books</span>
+      </div>
+
+      <!-- Rendered XSLT Output Area -->
+      <div id="transformed-view">
+        <header class="catalog-header">
+          <div class="header-content">
+            <h1>Digital Library Book Catalog</h1>
+            <p class="subtitle">XML Data Rendered using XSLT Transformation</p>
+          </div>
+          <div class="header-stats">
+            <div class="stat-box">
+              <span class="stat-number">5</span>
+              <span class="stat-label">Total Books</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-number available-text">3</span>
+              <span class="stat-label">Available</span>
+            </div>
+          </div>
+        </header>
+
+        <div class="table-card">
+          <table class="catalog-table" id="booksTable">
+            <thead>
+              <tr>
+                <th>Book ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Category</th>
+                <th>Publisher</th>
+                <th>Year</th>
+                <th>Price</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="booksBody">
+              <!-- Populated dynamically via XSLT or JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <footer class="catalog-footer">
+          <p>Web Technologies Lab &bull; Experiment 5: XML, DTD &amp; XSLT</p>
+        </footer>
+      </div>
+    </section>
+
+    <!-- Tab 2: XML Viewer -->
+    <section id="tab-xml" class="tab-content">
+      <div class="code-card">
+        <div class="code-card-header">
+          <span>library.xml (Well-Formed &amp; DTD-Valid XML Instance)</span>
+        </div>
+        <pre class="code-block" id="xmlDisplay"></pre>
+      </div>
+    </section>
+
+    <!-- Tab 3: DTD Viewer -->
+    <section id="tab-dtd" class="tab-content">
+      <div class="code-card">
+        <div class="code-card-header">
+          <span>library.dtd (Document Type Definition)</span>
+        </div>
+        <pre class="code-block" id="dtdDisplay"></pre>
+      </div>
+    </section>
+
+    <!-- Tab 4: XSLT Viewer -->
+    <section id="tab-xsl" class="tab-content">
+      <div class="code-card">
+        <div class="code-card-header">
+          <span>library.xsl (XSLT 1.0 Transformation Template)</span>
+        </div>
+        <pre class="code-block" id="xslDisplay"></pre>
+      </div>
+    </section>
+
+    <!-- Tab 5: Viva & Lab Notes -->
+    <section id="tab-notes" class="tab-content">
+      <div class="notes-card">
+        <h2>Experiment 5 Reference &amp; Viva Questions</h2>
+        <div class="notes-grid">
+          <div class="note-box">
+            <h3>1. What is DTD?</h3>
+            <p>DTD (Document Type Definition) defines the legal building blocks, elements, attributes, and structural grammar of an XML document.</p>
+          </div>
+          <div class="note-box">
+            <h3>2. Well-Formed vs Valid XML</h3>
+            <p><strong>Well-Formed:</strong> Conforms to basic XML syntax (one root, tags closed, case-sensitive).<br>
+            <strong>Valid:</strong> Is well-formed AND adheres strictly to a DTD or XML Schema.</p>
+          </div>
+          <div class="note-box">
+            <h3>3. What is XSLT?</h3>
+            <p>XSLT (Extensible Stylesheet Language Transformations) transforms XML data documents into HTML or other display formats using rule-based declarative templates.</p>
+          </div>
+          <div class="note-box">
+            <h3>4. Core XSLT Elements Used</h3>
+            <ul>
+              <li><code>&lt;xsl:template match="/"&gt;</code>: Matches root</li>
+              <li><code>&lt;xsl:for-each&gt;</code>: Loops over nodes</li>
+              <li><code>&lt;xsl:sort&gt;</code>: Sorts elements alphabetically</li>
+              <li><code>&lt;xsl:value-of&gt;</code>: Extracts element/attribute value</li>
+              <li><code>&lt;xsl:choose&gt;</code>: Conditional if-else styling</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    // Tab Switching
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Default XML Data representation (ensures instant display even on local file:/// origin)
+    const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="library.xsl"?>
+<!DOCTYPE library SYSTEM "library.dtd">
+<library>
+  <book id="B101" category="ComputerScience" status="Available">
+    <title>Clean Code: A Handbook of Agile Software Craftsmanship</title>
+    <author>Robert C. Martin</author>
+    <publisher>Prentice Hall</publisher>
+    <year>2008</year>
+    <isbn>978-0132350884</isbn>
+    <price currency="USD">37.50</price>
+  </book>
+  <book id="B102" category="ComputerScience" status="Available">
+    <title>Introduction to Algorithms</title>
+    <author>Thomas H. Cormen</author>
+    <publisher>MIT Press</publisher>
+    <year>2022</year>
+    <isbn>978-0262046305</isbn>
+    <price currency="USD">85.00</price>
+  </book>
+  <book id="B103" category="AI" status="Borrowed">
+    <title>Artificial Intelligence: A Modern Approach</title>
+    <author>Stuart Russell</author>
+    <publisher>Pearson</publisher>
+    <year>2020</year>
+    <isbn>978-0134610993</isbn>
+    <price currency="USD">78.00</price>
+  </book>
+  <book id="B104" category="WebDev" status="Available">
+    <title>HTML and CSS: Design and Build Websites</title>
+    <author>Jon Duckett</author>
+    <publisher>Wiley</publisher>
+    <year>2021</year>
+    <isbn>978-1118008188</isbn>
+    <price currency="USD">32.00</price>
+  </book>
+  <book id="B105" category="CyberSecurity" status="Borrowed">
+    <title>The Web Application Hacker's Handbook</title>
+    <author>Dafydd Stuttard</author>
+    <publisher>Wiley</publisher>
+    <year>2011</year>
+    <isbn>978-1118026472</isbn>
+    <price currency="USD">46.50</price>
+  </book>
+</library>`;
+
+    const dtdContent = `<!ELEMENT library (book+)>
+<!ELEMENT book (title, author, publisher, year, isbn, price)>
+<!ATTLIST book
+          id ID #REQUIRED
+          category (ComputerScience | AI | WebDev | CyberSecurity) "ComputerScience"
+          status (Available | Borrowed) "Available">
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT isbn (#PCDATA)>
+<!ELEMENT price (#PCDATA)>
+<!ATTLIST price currency CDATA "USD">`;
+
+    // Populate Code Display Tabs
+    document.getElementById('xmlDisplay').textContent = xmlContent;
+    document.getElementById('dtdDisplay').textContent = dtdContent;
+
+    // Load External XSL text for display if available, else fetch
+    fetch('library.xsl')
+      .then(res => res.text())
+      .then(text => document.getElementById('xslDisplay').textContent = text)
+      .catch(() => {
+        document.getElementById('xslDisplay').textContent = "<!-- See library.xsl in the project folder -->";
+      });
+
+    // Parse and render XML rows
+    let catalogBooks = [];
+    function loadCatalog() {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlContent, "text/xml");
+      const books = xmlDoc.querySelectorAll("book");
+
+      catalogBooks = Array.from(books).map(book => ({
+        id: book.getAttribute("id"),
+        category: book.getAttribute("category"),
+        status: book.getAttribute("status"),
+        title: book.querySelector("title")?.textContent || "",
+        author: book.querySelector("author")?.textContent || "",
+        publisher: book.querySelector("publisher")?.textContent || "",
+        year: book.querySelector("year")?.textContent || "",
+        isbn: book.querySelector("isbn")?.textContent || "",
+        currency: book.querySelector("price")?.getAttribute("currency") || "USD",
+        price: book.querySelector("price")?.textContent || "0.00"
+      }));
+
+      // Sort alphabetically by title (matching library.xsl xsl:sort)
+      catalogBooks.sort((a, b) => a.title.localeCompare(b.title));
+      renderRows(catalogBooks);
+    }
+
+    function renderRows(books) {
+      const tbody = document.getElementById("booksBody");
+      tbody.innerHTML = "";
+
+      if (books.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">No books match your search.</td></tr>`;
+        document.getElementById("bookCountBadge").textContent = "Showing 0 books";
+        return;
+      }
+
+      document.getElementById("bookCountBadge").textContent = `Showing ${books.length} of ${catalogBooks.length} books`;
+
+      books.forEach(b => {
+        const tr = document.createElement("tr");
+        const statusClass = b.status === 'Available' ? 'status-available' : 'status-borrowed';
+        tr.innerHTML = `
+          <td class="id-col">${escapeHtml(b.id)}</td>
+          <td class="title-col">${escapeHtml(b.title)}</td>
+          <td>${escapeHtml(b.author)}</td>
+          <td><span class="badge cat-${escapeHtml(b.category)}">${escapeHtml(b.category)}</span></td>
+          <td>${escapeHtml(b.publisher)}</td>
+          <td>${escapeHtml(b.year)}</td>
+          <td class="price-col">${escapeHtml(b.currency)} ${escapeHtml(b.price)}</td>
+          <td><span class="status-badge ${statusClass}">${escapeHtml(b.status)}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterCatalog() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      const filtered = catalogBooks.filter(b => 
+        b.title.toLowerCase().includes(q) ||
+        b.author.toLowerCase().includes(q) ||
+        b.category.toLowerCase().includes(q) ||
+        b.id.toLowerCase().includes(q)
+      );
+      renderRows(filtered);
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m]));
+    }
+
+    // Initialize on load
+    window.addEventListener('DOMContentLoaded', loadCatalog);
+  </script>
+</body>
+</html>

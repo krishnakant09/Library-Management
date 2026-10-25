@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Experiment 5: Web Technologies
+  File: library.dtd
+  Description: Document Type Definition (DTD) for Library Book Catalog.
+  Defines elements, sequence, cardinality, and attributes.
+-->
+
+<!-- Root element contains one or more book elements -->
+<!ELEMENT library (book+)>
+
+<!-- Each book contains mandatory elements in a fixed sequence -->
+<!ELEMENT book (title, author, publisher, year, isbn, price)>
+
+<!-- Attributes of the book element -->
+<!ATTLIST book
+          id ID #REQUIRED
+          category (ComputerScience | AI | WebDev | CyberSecurity) "ComputerScience"
+          status (Available | Borrowed) "Available">
+
+<!-- Child element declarations (#PCDATA = Parsed Character Data) -->
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT author (#PCDATA)>
+<!ELEMENT publisher (#PCDATA)>
+<!ELEMENT year (#PCDATA)>
+<!ELEMENT isbn (#PCDATA)>
+
+<!-- Price element with optional currency attribute -->
+<!ELEMENT price (#PCDATA)>
+<!ATTLIST price
+          currency CDATA "USD">
